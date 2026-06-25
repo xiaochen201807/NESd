@@ -14,22 +14,6 @@ class NesdApp extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useEffect(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.landscapeLeft,
-          DeviceOrientation.landscapeRight,
-        ]);
-      });
-      return () {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          SystemChrome.setPreferredOrientations([
-            DeviceOrientation.portraitUp,
-          ]);
-        });
-      };
-    }, const []);
-
     final observer = ref.watch(routerObserverProvider.notifier);
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(
