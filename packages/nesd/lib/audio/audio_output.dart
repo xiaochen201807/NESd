@@ -35,7 +35,7 @@ class AudioOutput {
 
   final _audioBuffer = RingBuffer(
     bufferConstructor: (size) => Float32List(size),
-    size: 2400, // 50 ms
+    size: 4800, // 100 ms
   );
 
   var _buffering = false;
@@ -74,7 +74,7 @@ class AudioOutput {
 
   void _init() {
     audioStream
-      ..init(bufferMilliSec: 50, waitingBufferMilliSec: 20, sampleRate: 48000)
+      ..init(bufferMilliSec: 100, waitingBufferMilliSec: 40, sampleRate: 48000)
       ..resume();
   }
 
