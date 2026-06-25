@@ -44,7 +44,7 @@ class MenuScreen extends ConsumerWidget {
                     onPressed: () => ref
                         .read(routerProvider)
                         .navigate(const EmulatorRoute()),
-                    child: const Text('Resume'),
+                    child: const Text('继续游戏'),
                   ),
                 ),
                 const NesdVerticalDivider(),
@@ -64,7 +64,7 @@ class MenuScreen extends ConsumerWidget {
                                 .romInfo,
                           ),
                         ),
-                    child: const Text('Save States'),
+                    child: const Text('存档管理'),
                   ),
                 ),
                 const NesdVerticalDivider(),
@@ -83,7 +83,7 @@ class MenuScreen extends ConsumerWidget {
                                 .romInfo,
                           ),
                         ),
-                    child: const Text('Cheats'),
+                    child: const Text('作弊码'),
                   ),
                 ),
                 const NesdVerticalDivider(),
@@ -94,7 +94,7 @@ class MenuScreen extends ConsumerWidget {
                       ref.read(nesControllerProvider).reset();
                       ref.read(routerProvider).navigate(const EmulatorRoute());
                     },
-                    child: const Text('Reset Game'),
+                    child: const Text('重置游戏'),
                   ),
                 ),
                 const NesdVerticalDivider(),
@@ -105,7 +105,7 @@ class MenuScreen extends ConsumerWidget {
                       ref.read(nesControllerProvider).stop();
                       ref.read(routerProvider).navigate(const MainRoute());
                     },
-                    child: const Text('Quit Game'),
+                    child: const Text('退出游戏'),
                   ),
                 ),
                 const NesdVerticalDivider(),
@@ -115,7 +115,7 @@ class MenuScreen extends ConsumerWidget {
                     onPressed: () => ref
                         .read(routerProvider)
                         .navigate(const SettingsRoute()),
-                    child: const Text('Settings'),
+                    child: const Text('设置'),
                   ),
                 ),
                 const NesdVerticalDivider(),
@@ -125,7 +125,7 @@ class MenuScreen extends ConsumerWidget {
                       ref.read(nesControllerProvider).stop();
                       quit();
                     },
-                    child: const Text('Quit NESd'),
+                    child: const Text('退出 NESd'),
                   ),
                 ),
               ],

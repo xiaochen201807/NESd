@@ -18,7 +18,7 @@ class NesdApp extends ConsumerWidget {
     );
 
     return MaterialApp.router(
-      title: 'NESd',
+      title: '像素电玩城',
       theme: nesdThemeLight,
       darkTheme: nesdThemeDark,
       debugShowCheckedModeBanner: false,

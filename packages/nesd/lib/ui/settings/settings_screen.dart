@@ -60,7 +60,7 @@ class SettingsScreen extends HookConsumerWidget {
     return NesdScaffold(
       appBar: AppBar(
         title: Text(
-          'Settings',
+          '设置',
           style: TextStyle(
             color: theme.colorScheme.primary,
             fontVariations: const [FontVariation.weight(700)],
@@ -91,11 +91,11 @@ class SettingsScreen extends HookConsumerWidget {
                     isScrollable: true,
                     tabAlignment: TabAlignment.center,
                     tabs: const [
-                      TabHeader(key: generalKey, title: 'General'),
-                      TabHeader(key: graphicsKey, title: 'Graphics'),
-                      TabHeader(key: audioKey, title: 'Audio'),
-                      TabHeader(key: controlsKey, title: 'Controls'),
-                      TabHeader(key: debugKey, title: 'Debug'),
+                      TabHeader(key: generalKey, title: '常规'),
+                      TabHeader(key: graphicsKey, title: '画面'),
+                      TabHeader(key: audioKey, title: '音频'),
+                      TabHeader(key: controlsKey, title: '控制'),
+                      TabHeader(key: debugKey, title: '调试'),
                     ],
                   ),
                 ),

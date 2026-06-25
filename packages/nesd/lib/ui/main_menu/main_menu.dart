@@ -112,7 +112,7 @@ class OpenRomButton extends ConsumerWidget {
 
           final file = await AutoRouter.of(context).push<FilesystemFile?>(
             FilePickerRoute(
-              title: 'Select a ROM',
+              title: '选择 ROM 文件',
               initialDirectory: directory,
               type: FilePickerType.file,
               allowedExtensions: const ['.nes', '.zip'],
@@ -126,7 +126,7 @@ class OpenRomButton extends ConsumerWidget {
             ref.read(routerProvider).navigate(const EmulatorRoute());
           }
         },
-        child: const Text('Open ROM'),
+        child: const Text('打开 ROM'),
       ),
     );
   }
@@ -177,7 +177,7 @@ class SettingsButton extends ConsumerWidget {
       child: NesdButton(
         onPressed: () =>
             ref.read(routerProvider).navigate(const SettingsRoute()),
-        child: const Text('Settings'),
+        child: const Text('设置'),
       ),
     );
   }
@@ -194,7 +194,7 @@ class AboutButton extends StatelessWidget {
           context: context,
           builder: (context) => const AboutDialog(),
         ),
-        child: const Text('About'),
+        child: const Text('关于'),
       ),
     );
   }
@@ -208,7 +208,7 @@ class QuitButton extends StatelessWidget {
     return Center(
       child: NesdButton(
         onPressed: () => quit(),
-        child: const Text('Quit NESd'),
+        child: const Text('退出'),
       ),
     );
   }

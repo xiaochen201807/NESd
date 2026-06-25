@@ -125,7 +125,7 @@ class RecentRomList extends HookConsumerWidget {
               onRemove: () async => await remove(context, romTileData),
               contextMenuBuilder: (context, close) => [
                 ListTile(
-                  title: const Text('Save states'),
+                  title: const Text('存档管理'),
                   onTap: () {
                     close();
                     ref
@@ -136,7 +136,7 @@ class RecentRomList extends HookConsumerWidget {
                   },
                 ),
                 ListTile(
-                  title: const Text('Remove from list'),
+                  title: const Text('从列表中移除'),
                   onTap: () async {
                     close();
                     await remove(context, romTileData);
