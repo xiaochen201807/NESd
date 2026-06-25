@@ -24,6 +24,7 @@ class PaginatedGrid extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final page = useState(0);
+    final pageController = useMemoized(() => PageController(), []);
 
     final mediaQuery = MediaQuery.of(context);
 
@@ -41,11 +42,6 @@ class PaginatedGrid extends HookConsumerWidget {
 
         final currentPage = page.value.clamp(0, pages - 1);
 
-        final romPaths = children
-            .skip(currentPage * count)
-            .take(count)
-            .toList();
-
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -54,27 +50,61 @@ class PaginatedGrid extends HookConsumerWidget {
               height: rowCount * tileHeight,
               child: currentPage > 0
                   ? InkWell(
-                      onTap: () => page.value = currentPage - 1,
+                      onTap: () {
+                        final newPage = currentPage - 1;
+                        page.value = newPage;
+                        pageController.animateToPage(
+                          newPage,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      },
                       child: const Icon(Icons.arrow_back_ios),
                     )
                   : const SizedBox(),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (final row in romPaths.slices(columnCount))
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: row,
-                  ),
-              ],
+            Expanded(
+              child: SizedBox(
+                height: rowCount * tileHeight,
+                child: PageView.builder(
+                  controller: pageController,
+                  itemCount: pages,
+                  onPageChanged: (index) => page.value = index,
+                  itemBuilder: (context, pageIndex) {
+                    final romPaths = children
+                        .skip(pageIndex * count)
+                        .take(count)
+                        .toList();
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for (final row in romPaths.slices(columnCount))
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: row,
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
             SizedBox(
               width: 40,
               height: rowCount * tileHeight,
               child: currentPage < pages - 1
                   ? InkWell(
-                      onTap: () => page.value = currentPage + 1,
+                      onTap: () {
+                        final newPage = currentPage + 1;
+                        page.value = newPage;
+                        pageController.animateToPage(
+                          newPage,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      },
                       child: const Icon(Icons.arrow_forward_ios),
                     )
                   : const SizedBox(),

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart' hide AboutDialog;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:nesd/exception/nesd_exception.dart';
 import 'package:nesd/ui/about/about_dialog.dart';
-import 'package:nesd/ui/common/dividers.dart';
 import 'package:nesd/ui/common/focus_child.dart';
 import 'package:nesd/ui/common/nesd_button.dart';
 import 'package:nesd/ui/common/quit.dart';
@@ -68,19 +67,25 @@ class MainMenu extends HookConsumerWidget {
       child: Center(
         child: Padding(
           padding: EdgeInsets.all(8),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                RecentRomList(),
-                OpenRomButton(key: openRomKey),
-                NesdVerticalDivider(),
-                SettingsButton(key: settingsKey),
-                NesdVerticalDivider(),
-                AboutButton(key: aboutKey),
-                NesdVerticalDivider(),
-                QuitButton(key: quitKey),
-              ],
-            ),
+          child: Column(
+            children: [
+              Expanded(child: RecentRomList()),
+              SizedBox(height: 8),
+              Padding(
+                padding: EdgeInsets.only(bottom: 8),
+                child: Wrap(
+                  spacing: 12,
+                  runSpacing: 8,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    OpenRomButton(key: openRomKey),
+                    SettingsButton(key: settingsKey),
+                    AboutButton(key: aboutKey),
+                    QuitButton(key: quitKey),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
