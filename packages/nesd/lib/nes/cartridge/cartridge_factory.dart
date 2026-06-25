@@ -75,7 +75,7 @@ class CartridgeFactory {
     final chrRomSize = rom[5] * 0x2000;
 
     if (chrRomSize == 0) {
-      return Uint8List(0x10000);
+      return Uint8List(0);
     }
 
     return rom.sublist(
@@ -141,7 +141,8 @@ class CartridgeFactory {
 
   int _parseChrRamSize(Uint8List rom) {
     if (_parseRomFormat(rom) == RomFormat.iNes) {
-      return 0;
+      final chrRomSize = rom[5] * 0x2000;
+      return chrRomSize == 0 ? 0x2000 : 0;
     } else {
       return 64 << (rom[11] & 0x0f);
     }
