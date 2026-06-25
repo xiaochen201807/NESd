@@ -49,23 +49,19 @@ class TouchControls extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return OrientationBuilder(
-      builder: (_, orientation) {
-        final config = orientation == Orientation.portrait
-            ? portraitConfig
-            : landscapeConfig;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final config = constraints.maxWidth > constraints.maxHeight
+            ? landscapeConfig
+            : portraitConfig;
 
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            return TouchArea(
-              constraints: constraints,
-              child: Stack(
-                children: [
-                  for (final item in config) TouchControl(config: item),
-                ],
-              ),
-            );
-          },
+        return TouchArea(
+          constraints: constraints,
+          child: Stack(
+            children: [
+              for (final item in config) TouchControl(config: item),
+            ],
+          ),
         );
       },
     );
