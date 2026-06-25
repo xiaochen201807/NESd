@@ -63,11 +63,14 @@ class AudioOutput {
   }
 
   void processSamples(Float32List samples) {
-    final volumeApplied = Float32List.fromList(
-      samples.map((s) => s * _volume).toList(),
-    );
+    // Apply volume in-place to avoid per-frame allocations
+    if (_volume != 1.0) {
+      for (var i = 0; i < samples.length; i++) {
+        samples[i] *= _volume;
+      }
+    }
 
-    _audioBuffer.write(volumeApplied);
+    _audioBuffer.write(samples);
 
     _flushSamples();
   }

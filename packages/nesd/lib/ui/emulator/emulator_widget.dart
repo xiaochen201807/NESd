@@ -15,7 +15,6 @@ class EmulatorWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsControllerProvider);
-    debugPrint('--- EmulatorWidget settings.showTouchControls: ${settings.showTouchControls}, stretch: ${settings.stretch}, pixelAspectRatio: ${settings.pixelAspectRatio}, scaling: ${settings.scaling}');
     final keyboardInputHandler = ref.watch(keyboardInputHandlerProvider);
 
     final theme = Theme.of(context);
