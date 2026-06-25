@@ -20,14 +20,18 @@ class EmulatorScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     useEffect(() {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
-      return () {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
         ]);
+      });
+      return () {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+          ]);
+        });
       };
     }, const []);
 
