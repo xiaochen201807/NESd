@@ -32,15 +32,15 @@ class RingBuffer<T, S extends List<T>> {
     final data = bufferConstructor(readSize);
 
     if (_start + readSize <= this.size) {
-      data.setAll(0, _buffer.sublist(_start, _start + readSize));
+      data.setRange(0, readSize, _buffer, _start);
     } else {
       // read wraps around
       final firstSegmentSize = this.size - _start;
       final secondSegmentSize = readSize - firstSegmentSize;
 
       data
-        ..setAll(0, _buffer.sublist(_start, this.size))
-        ..setAll(firstSegmentSize, _buffer.sublist(0, secondSegmentSize));
+        ..setRange(0, firstSegmentSize, _buffer, _start)
+        ..setRange(firstSegmentSize, readSize, _buffer, 0);
     }
 
     _start = (_start + readSize) % this.size;
@@ -52,15 +52,15 @@ class RingBuffer<T, S extends List<T>> {
     final writeSize = min(data.length, remaining);
 
     if (_end + writeSize <= size) {
-      _buffer.setAll(_end, data.sublist(0, writeSize));
+      _buffer.setRange(_end, _end + writeSize, data, 0);
     } else {
       // write wraps around
 
       final firstSegmentSize = size - _end;
 
       _buffer
-        ..setAll(_end, data.sublist(0, firstSegmentSize))
-        ..setAll(0, data.sublist(firstSegmentSize, writeSize));
+        ..setRange(_end, size, data, 0)
+        ..setRange(0, writeSize - firstSegmentSize, data, firstSegmentSize);
     }
 
     _end = (_end + writeSize) % size;

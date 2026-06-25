@@ -42,6 +42,8 @@ class AudioOutput {
 
   double _volume = 1.0;
 
+  Float32List? _volumeBuffer;
+
   double get volume => _volume;
 
   set volume(double value) {
@@ -63,14 +65,18 @@ class AudioOutput {
   }
 
   void processSamples(Float32List samples) {
-    // Apply volume in-place to avoid per-frame allocations
+    var writeSamples = samples;
     if (_volume != 1.0) {
-      for (var i = 0; i < samples.length; i++) {
-        samples[i] *= _volume;
+      if (_volumeBuffer == null || _volumeBuffer!.length < samples.length) {
+        _volumeBuffer = Float32List(samples.length * 2);
       }
+      for (var i = 0; i < samples.length; i++) {
+        _volumeBuffer![i] = samples[i] * _volume;
+      }
+      writeSamples = Float32List.sublistView(_volumeBuffer!, 0, samples.length);
     }
 
-    _audioBuffer.write(samples);
+    _audioBuffer.write(writeSamples);
 
     _flushSamples();
   }

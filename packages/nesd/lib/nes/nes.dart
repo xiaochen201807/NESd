@@ -94,7 +94,16 @@ class NES {
 
   NESState? _lastState;
 
-  NESState? get state => _lastState;
+  NESState _createState() {
+    return NESState(
+      cpuState: cpu.state,
+      ppuState: ppu.state,
+      apuState: apu.state,
+      cartridgeState: bus.cartridge.state,
+    );
+  }
+
+  NESState? get state => _lastState ??= _createState();
 
   set state(NESState? state) {
     _lastState = state;
@@ -222,7 +231,7 @@ class NES {
     eventBus.add(
       FrameNesEvent(
         samples: Float32List.fromList(
-          apu.sampleBuffer.sublist(0, apu.sampleIndex).reversed.toList(),
+          Float32List.sublistView(apu.sampleBuffer, 0, apu.sampleIndex).reversed.toList(),
         ),
         frameTime: _frameTime,
         frame: ppu.frames,
@@ -245,7 +254,7 @@ class NES {
 
     eventBus.add(
       FrameNesEvent(
-        samples: apu.sampleBuffer.sublist(0, apu.sampleIndex),
+        samples: Float32List.sublistView(apu.sampleBuffer, 0, apu.sampleIndex),
         frameTime: _frameTime, // last frame time
         frame: ppu.frames,
         sleepBudget: _sleepBudget,
@@ -253,17 +262,12 @@ class NES {
       ),
     );
 
-    final state = NESState(
-      cpuState: cpu.state,
-      ppuState: ppu.state,
-      apuState: apu.state,
-      cartridgeState: bus.cartridge.state,
-    );
-
-    _lastState = state;
-
     if (rewindEnabled) {
+      final state = _createState();
+      _lastState = state;
       _rewindBuffer.add(state);
+    } else {
+      _lastState = null;
     }
 
     if (stopAfterNextFrame) {
