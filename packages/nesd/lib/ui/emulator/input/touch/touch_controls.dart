@@ -7,9 +7,9 @@ import 'package:nesd/ui/emulator/input/touch/rectangle_button.dart';
 import 'package:nesd/ui/emulator/input/touch/touch_input_config.dart';
 import 'package:nesd/ui/settings/settings.dart';
 
-const touchInputColorActive = Color(0xeeaaaaaa);
-const touchInputColor = Color(0xbbaaaaaa);
-const touchInputColorSecondary = Color(0x66aaaaaa);
+const touchInputColorActive = Color(0xaa888888);
+const touchInputColor = Color(0x55aaaaaa);
+const touchInputColorSecondary = Color(0x33aaaaaa);
 
 class TouchControlsBuilder extends ConsumerWidget {
   const TouchControlsBuilder({this.edit = false, super.key});
