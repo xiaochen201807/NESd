@@ -269,7 +269,7 @@ class DisplayBuilder extends ConsumerWidget {
       .ntsc => 8 / 7,
       .pal => 11 / 8,
       .square => 1,
-      .stretch => constraints.maxWidth / constraints.maxHeight,
+      .stretch => (constraints.maxWidth / constraints.maxHeight) / (imageWidth / imageHeight),
       .custom => settings.customPixelAspectRatio,
     };
   }
