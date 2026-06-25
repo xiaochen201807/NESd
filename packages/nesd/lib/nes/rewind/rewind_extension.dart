@@ -1,11 +1,9 @@
 import 'dart:math';
 
-import 'package:es_compression/lz4.dart';
-
 extension IntListRewindExtension on List<int> {
-  List<int> compress() => nesdLz4.encode(this);
+  List<int> compress() => this;
 
-  List<int> decompress() => nesdLz4.decode(this);
+  List<int> decompress() => this;
 
   @pragma('vm:prefer-inline')
   List<int> diff(List<int> other) {
@@ -18,5 +16,3 @@ extension IntListRewindExtension on List<int> {
     return this;
   }
 }
-
-final nesdLz4 = Lz4Codec(level: -1);
