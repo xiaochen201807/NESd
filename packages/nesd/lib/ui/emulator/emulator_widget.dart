@@ -47,6 +47,12 @@ class EmulatorWidget extends ConsumerWidget {
                 key: menuKey,
                 icon: const Icon(Icons.menu),
                 color: Colors.white,
+                iconSize: 32,
+                padding: const EdgeInsets.all(14),
+                constraints: const BoxConstraints(
+                  minWidth: 60,
+                  minHeight: 60,
+                ),
                 onPressed: () =>
                     ref.read(routerProvider).navigate(const MenuRoute()),
               ),

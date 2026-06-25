@@ -8,6 +8,7 @@ class NesdButton extends StatelessWidget {
     this.autofocus = false,
     this.icon,
     this.onPressed,
+    this.width = 200,
     super.key,
   });
 
@@ -15,6 +16,7 @@ class NesdButton extends StatelessWidget {
   final bool autofocus;
   final Icon? icon;
   final VoidCallback? onPressed;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class NesdButton extends StatelessWidget {
           fontVariations: const [FontVariation.weight(700)],
         ),
         child: SizedBox(
-          width: 200,
+          width: width,
           child: icon != null
               ? FilledButton.icon(
                   autofocus: autofocus,

@@ -36,6 +36,8 @@ const inputActions = [
   controller1Select,
   controller1A,
   controller1B,
+  controller1X,
+  controller1Y,
   controller2Up,
   controller2Down,
   controller2Left,

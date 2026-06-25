@@ -110,35 +110,51 @@ sealed class TouchInputConfig with _$TouchInputConfig {
 
 const defaultPortraitConfig = [
   DPadConfig(
-    x: -0.55,
-    y: 0.4,
+    x: -0.6,
+    y: 0.55,
     upAction: controller1Up,
     downAction: controller1Down,
     leftAction: controller1Left,
     rightAction: controller1Right,
   ),
-  CircleButtonConfig(x: 0.7, y: 0.4, action: controller1A, label: 'A'),
-  CircleButtonConfig(x: 0.2, y: 0.4, action: controller1B, label: 'B'),
+  // 右下方扇形功能键：A 主键，B 左侧，X=A+B 组合（跳跃/旋风腿）在上，Y 连发在右。
+  CircleButtonConfig(x: 0.72, y: 0.55, action: controller1A, label: 'A'),
+  CircleButtonConfig(x: 0.32, y: 0.55, action: controller1B, label: 'B'),
+  CircleButtonConfig(
+    x: 0.52,
+    y: 0.32,
+    action: controller1X,
+    label: 'X',
+    size: 65,
+  ),
+  CircleButtonConfig(
+    x: 0.92,
+    y: 0.32,
+    action: controller1Y,
+    label: 'Y',
+    size: 65,
+  ),
   RectangleButtonConfig(
-    height: 40,
-    x: -0.25,
-    y: 0.0,
+    height: 36,
+    x: -0.2,
+    y: -0.7,
     action: controller1Select,
     label: 'Select',
   ),
   RectangleButtonConfig(
-    height: 40,
-    x: 0.25,
-    y: 0.0,
+    height: 36,
+    x: 0.2,
+    y: -0.7,
     action: controller1Start,
     label: 'Start',
   ),
 ];
 
 const defaultLandscapeConfig = [
+  // 摇杆默认左下方（王者荣耀式布局）。
   JoyStickConfig(
     x: -0.7,
-    y: 0.45,
+    y: 0.5,
     size: 160,
     innerSize: 65,
     upAction: controller1Up,
@@ -146,25 +162,29 @@ const defaultLandscapeConfig = [
     leftAction: controller1Left,
     rightAction: controller1Right,
   ),
+  // 右下方扇形功能键钻石布局：
+  //   Y(连发) 左 — X(A+B 组合，跳跃/旋风腿) 上 — A 右 — B 下
   CircleButtonConfig(
-    x: 0.85,
-    y: 0.25,
+    x: 0.86,
+    y: 0.45,
     action: controller1A,
     label: 'A',
-    size: 80,
+    size: 85,
   ),
   CircleButtonConfig(
-    x: 0.55,
-    y: 0.45,
+    x: 0.68,
+    y: 0.68,
     action: controller1B,
     label: 'B',
     size: 80,
   ),
+  CircleButtonConfig(x: 0.68, y: 0.22, action: controller1X, label: 'X'),
+  CircleButtonConfig(x: 0.5, y: 0.45, action: controller1Y, label: 'Y'),
   RectangleButtonConfig(
     height: 35,
     width: 70,
     x: -0.15,
-    y: -0.65,
+    y: -0.7,
     action: controller1Select,
     label: 'Select',
   ),
@@ -172,7 +192,7 @@ const defaultLandscapeConfig = [
     height: 35,
     width: 70,
     x: 0.15,
-    y: -0.65,
+    y: -0.7,
     action: controller1Start,
     label: 'Start',
   ),

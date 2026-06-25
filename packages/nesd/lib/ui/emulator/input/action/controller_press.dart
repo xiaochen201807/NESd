@@ -123,3 +123,43 @@ const controller2B = ControllerPress(
   title: 'Controller 2 B',
   code: 'controller2.b',
 );
+
+// 组合键：一次按下同时触发多个 NES 按键（例如双截龙的跳跃 = A+B）。
+class ComboPress extends InputAction {
+  const ComboPress(
+    this.controller,
+    this.buttons, {
+    required super.title,
+    required super.code,
+  });
+
+  final int controller;
+  final List<NesButton> buttons;
+}
+
+// 连发键：按住时以固定频率反复触发同一个 NES 按键（射击类游戏连射）。
+class TurboPress extends InputAction {
+  const TurboPress(
+    this.controller,
+    this.button, {
+    required super.title,
+    required super.code,
+  });
+
+  final int controller;
+  final NesButton button;
+}
+
+const controller1X = ComboPress(
+  0,
+  [NesButton.a, NesButton.b],
+  title: 'Controller 1 X (A+B)',
+  code: 'controller1.x',
+);
+
+const controller1Y = TurboPress(
+  0,
+  NesButton.b,
+  title: 'Controller 1 Y (Turbo)',
+  code: 'controller1.y',
+);

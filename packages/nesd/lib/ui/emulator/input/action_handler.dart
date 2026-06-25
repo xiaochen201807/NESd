@@ -100,7 +100,16 @@ class ActionHandler {
 
   String? _currentRoute = MainRoute.name;
 
+  // 连发键的定时器，按 action.code 区分，松手时取消。
+  final Map<String, Timer> _turboTimers = {};
+
   void dispose() {
+    for (final timer in _turboTimers.values) {
+      timer.cancel();
+    }
+
+    _turboTimers.clear();
+
     _actionSubscription.cancel();
   }
 
@@ -140,6 +149,14 @@ class ActionHandler {
         if (_inGame) {
           nes?.buttonUp(action.controller, action.button);
         }
+      case ComboPress():
+        if (_inGame) {
+          for (final button in action.buttons) {
+            nes?.buttonUp(action.controller, button);
+          }
+        }
+      case TurboPress():
+        _stopTurbo(action);
       case FastForward():
         if (_inGame) {
           nes?.fastForward = false;
@@ -181,6 +198,12 @@ class ActionHandler {
     switch (action) {
       case ControllerPress():
         nes?.buttonDown(action.controller, action.button);
+      case ComboPress():
+        for (final button in action.buttons) {
+          nes?.buttonDown(action.controller, button);
+        }
+      case TurboPress():
+        _startTurbo(action);
       case SaveState():
         _saveState(action.slot);
       case LoadState():
@@ -241,6 +264,43 @@ class ActionHandler {
         router.navigate(const EmulatorRoute());
       default:
       // no-op
+    }
+  }
+
+  // 连发：先立刻按一次，随后以约 16ms（每帧按下、每帧松开）的节奏反复触发，
+  // 直到松手时 _stopTurbo 取消定时器并确保按键处于松开状态。
+  void _startTurbo(TurboPress action) {
+    if (!_inGame) {
+      return;
+    }
+
+    _turboTimers[action.code]?.cancel();
+
+    var pressed = false;
+
+    void tick() {
+      pressed = !pressed;
+
+      if (pressed) {
+        nes?.buttonDown(action.controller, action.button);
+      } else {
+        nes?.buttonUp(action.controller, action.button);
+      }
+    }
+
+    tick();
+
+    _turboTimers[action.code] = Timer.periodic(
+      const Duration(milliseconds: 33),
+      (_) => tick(),
+    );
+  }
+
+  void _stopTurbo(TurboPress action) {
+    _turboTimers.remove(action.code)?.cancel();
+
+    if (_inGame) {
+      nes?.buttonUp(action.controller, action.button);
     }
   }
 

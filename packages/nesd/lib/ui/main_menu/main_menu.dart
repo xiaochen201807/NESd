@@ -74,9 +74,10 @@ class MainMenu extends HookConsumerWidget {
               Padding(
                 padding: EdgeInsets.only(bottom: 8),
                 child: Wrap(
-                  spacing: 12,
+                  spacing: 10,
                   runSpacing: 8,
                   alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     OpenRomButton(key: openRomKey),
                     SettingsButton(key: settingsKey),
@@ -131,6 +132,8 @@ class OpenRomButton extends ConsumerWidget {
             ref.read(routerProvider).navigate(const EmulatorRoute());
           }
         },
+        width: null,
+        icon: const Icon(Icons.folder_open, size: 18),
         child: const Text('打开 ROM'),
       ),
     );
@@ -182,6 +185,8 @@ class SettingsButton extends ConsumerWidget {
       child: NesdButton(
         onPressed: () =>
             ref.read(routerProvider).navigate(const SettingsRoute()),
+        width: null,
+        icon: const Icon(Icons.settings, size: 18),
         child: const Text('设置'),
       ),
     );
@@ -199,6 +204,8 @@ class AboutButton extends StatelessWidget {
           context: context,
           builder: (context) => const AboutDialog(),
         ),
+        width: null,
+        icon: const Icon(Icons.info_outline, size: 18),
         child: const Text('关于'),
       ),
     );
@@ -213,6 +220,8 @@ class QuitButton extends StatelessWidget {
     return Center(
       child: NesdButton(
         onPressed: () => quit(),
+        width: null,
+        icon: const Icon(Icons.exit_to_app, size: 18),
         child: const Text('退出'),
       ),
     );
