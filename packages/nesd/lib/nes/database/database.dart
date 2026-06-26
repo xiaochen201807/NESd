@@ -36,7 +36,7 @@ class NesDatabase {
   }
 
   Future<void> _load() async {
-    final databaseXml = await rootBundle.loadString('assets/nes20db.xml');
+    final databaseXml = await rootBundle.loadString('packages/nesd/assets/nes20db.xml');
     final data = XmlDocument.parse(databaseXml);
 
     for (final game in data.findAllElements('game')) {

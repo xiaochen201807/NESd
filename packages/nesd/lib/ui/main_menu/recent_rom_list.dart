@@ -33,7 +33,7 @@ class RecentRomList extends HookConsumerWidget {
           key: logoKey,
           width: 256,
           height: 256,
-          child: Image.asset('assets/logo.png'),
+          child: Image.asset('assets/logo.png', package: 'nesd'),
         ),
       );
     }

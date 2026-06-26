@@ -62,9 +62,9 @@ void _addLicenses() {
   LicenseRegistry.addLicense(() async* {
     yield await _addLicense(
       'Ubuntu Mono font',
-      'assets/fonts/UbuntuMono-LICENSE.txt',
+      'packages/nesd/assets/fonts/UbuntuMono-LICENSE.txt',
     );
-    yield await _addLicense('Inter font', 'assets/fonts/Inter-LICENSE.txt');
+    yield await _addLicense('Inter font', 'packages/nesd/assets/fonts/Inter-LICENSE.txt');
   });
 }
 

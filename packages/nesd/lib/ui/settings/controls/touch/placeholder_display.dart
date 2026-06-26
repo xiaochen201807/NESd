@@ -13,7 +13,7 @@ class PlaceholderDisplay extends HookWidget {
     final imageConfiguration = createLocalImageConfiguration(context);
 
     useEffect(() {
-      const assetImage = AssetImage('assets/placeholder.png');
+      const assetImage = AssetImage('assets/placeholder.png', package: 'nesd');
 
       final imageStream = assetImage.resolve(imageConfiguration);
 

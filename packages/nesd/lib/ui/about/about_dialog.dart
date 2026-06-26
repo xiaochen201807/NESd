@@ -14,12 +14,20 @@ class AboutDialog extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return Theme(
-      data: theme.copyWith(textTheme: _updateTextTheme(theme)),
+      data: theme.copyWith(
+        textTheme: _updateTextTheme(theme),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: theme.colorScheme.onPrimary,
+          ),
+        ),
+      ),
       child: material.AboutDialog(
         applicationVersion: packageInfo.version,
         applicationLegalese: '© 2024-2026 John Paul Jonte',
         applicationIcon: Image.asset(
           'assets/logo.png',
+          package: 'nesd',
           width: 128,
           height: 128,
         ),
