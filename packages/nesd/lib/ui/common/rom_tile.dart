@@ -90,16 +90,19 @@ class RomTile extends ConsumerWidget {
                         color: Colors.black.withAlpha(150),
                         padding: const EdgeInsets.all(8),
                         child: Center(
-                          child: StrokeText(
-                            romTileData.title,
-                            style: baseTextStyle.copyWith(
-                              fontSize: 15,
-                              fontVariations: const [FontVariation.weight(700)],
-                              color: Colors.white,
+                          child: SizedBox(
+                            width: 230,
+                            child: StrokeText(
+                              romTileData.title,
+                              style: baseTextStyle.copyWith(
+                                fontSize: 15,
+                                fontVariations: const [FontVariation.weight(700)],
+                                color: Colors.white,
+                              ),
+                              strokeWidth: 2,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            strokeWidth: 2,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),
