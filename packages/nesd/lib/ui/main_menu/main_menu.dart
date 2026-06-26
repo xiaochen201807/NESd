@@ -103,39 +103,37 @@ class OpenRomButton extends ConsumerWidget {
     final settingsController = ref.read(settingsControllerProvider.notifier);
     final filesystem = ref.watch(filesystemProvider);
 
-    return Center(
-      child: NesdButton(
-        onPressed: () async {
-          final directory = await _getRomPath(filesystem, settingsController);
+    return NesdButton(
+      onPressed: () async {
+        final directory = await _getRomPath(filesystem, settingsController);
 
-          if (directory == null) {
-            return;
-          }
+        if (directory == null) {
+          return;
+        }
 
-          if (!context.mounted) {
-            return;
-          }
+        if (!context.mounted) {
+          return;
+        }
 
-          final file = await AutoRouter.of(context).push<FilesystemFile?>(
-            FilePickerRoute(
-              title: '选择 ROM 文件',
-              initialDirectory: directory,
-              type: FilePickerType.file,
-              allowedExtensions: const ['.nes', '.zip'],
-              onChangeDirectory: (directory) =>
-                  settingsController.lastRomPath = directory,
-            ),
-          );
+        final file = await AutoRouter.of(context).push<FilesystemFile?>(
+          FilePickerRoute(
+            title: '选择 ROM 文件',
+            initialDirectory: directory,
+            type: FilePickerType.file,
+            allowedExtensions: const ['.nes', '.zip'],
+            onChangeDirectory: (directory) =>
+                settingsController.lastRomPath = directory,
+          ),
+        );
 
-          if (file != null) {
-            controller.loadRom(file);
-            ref.read(routerProvider).navigate(const EmulatorRoute());
-          }
-        },
-        width: null,
-        icon: const Icon(Icons.folder_open, size: 18),
-        child: const Text('打开 ROM'),
-      ),
+        if (file != null) {
+          controller.loadRom(file);
+          ref.read(routerProvider).navigate(const EmulatorRoute());
+        }
+      },
+      width: null,
+      icon: const Icon(Icons.folder_open, size: 18),
+      child: const Text('打开 ROM'),
     );
   }
 
@@ -181,14 +179,12 @@ class SettingsButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Center(
-      child: NesdButton(
-        onPressed: () =>
-            ref.read(routerProvider).navigate(const SettingsRoute()),
-        width: null,
-        icon: const Icon(Icons.settings, size: 18),
-        child: const Text('设置'),
-      ),
+    return NesdButton(
+      onPressed: () =>
+          ref.read(routerProvider).navigate(const SettingsRoute()),
+      width: null,
+      icon: const Icon(Icons.settings, size: 18),
+      child: const Text('设置'),
     );
   }
 }
@@ -198,16 +194,14 @@ class AboutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: NesdButton(
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => const AboutDialog(),
-        ),
-        width: null,
-        icon: const Icon(Icons.info_outline, size: 18),
-        child: const Text('关于'),
+    return NesdButton(
+      onPressed: () => showDialog(
+        context: context,
+        builder: (context) => const AboutDialog(),
       ),
+      width: null,
+      icon: const Icon(Icons.info_outline, size: 18),
+      child: const Text('关于'),
     );
   }
 }
@@ -217,13 +211,11 @@ class QuitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: NesdButton(
-        onPressed: () => quit(),
-        width: null,
-        icon: const Icon(Icons.exit_to_app, size: 18),
-        child: const Text('退出'),
-      ),
+    return NesdButton(
+      onPressed: () => quit(),
+      width: null,
+      icon: const Icon(Icons.exit_to_app, size: 18),
+      child: const Text('退出'),
     );
   }
 }
