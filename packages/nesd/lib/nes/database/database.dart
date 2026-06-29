@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:archive/archive.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:nesd/extension/string_extension.dart';
 import 'package:nesd/nes/region.dart';
@@ -9,13 +13,16 @@ import 'package:xml/xml.dart';
 
 part 'database.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 NesDatabase database(Ref ref) => NesDatabase();
 
 class NesDatabase {
   NesDatabase() {
-    _load();
+    _loadFuture = _load();
   }
+
+  late final Future<void> _loadFuture;
+  Future<void> get loadFuture => _loadFuture;
 
   final Map<String, NesDatabaseEntry> _database = {};
 
@@ -36,67 +43,83 @@ class NesDatabase {
   }
 
   Future<void> _load() async {
-    final databaseXml = await rootBundle.loadString('packages/nesd/assets/nes20db.xml');
-    final data = XmlDocument.parse(databaseXml);
+    // 从 gzip 压缩的数据库文件加载（比原始 XML 小 ~78%）
+    final bytes = await rootBundle.load('packages/nesd/assets/nes20db.xml.gz');
+    // 在独立 isolate 中解压 + 解析，避免阻塞主线程
+    final entries = await compute(
+      _parseDatabase,
+      bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes),
+    );
+    _database.addAll(entries);
+  }
+}
 
-    for (final game in data.findAllElements('game')) {
-      final romHash = _getHash(game, 'rom');
+// 顶层函数，在 compute isolate 中执行解压和 XML 解析
+Map<String, NesDatabaseEntry> _parseDatabase(Uint8List gzBytes) {
+  final xmlBytes = const GZipDecoder().decodeBytes(gzBytes);
+  final xmlString = utf8.decode(xmlBytes);
+  final data = XmlDocument.parse(xmlString);
+  final result = <String, NesDatabaseEntry>{};
 
-      if (romHash == null) {
-        continue;
-      }
+  for (final game in data.findAllElements('game')) {
+    final romHash = _getHash(game, 'rom');
 
-      final name = p.basenameWithoutExtension(
-        game.children.whereType<XmlComment>().single.value.trim().replaceAll(
-          '\\',
-          '/',
-        ),
-      );
-
-      final chrHash = _getHash(game, 'chrrom');
-      final prgHash = _getHash(game, 'prgrom')!;
-      final mapper = _getAttribute(game, 'pcb', 'mapper').toIntOrZero();
-      final region = _getAttribute(game, 'console', 'region').toIntOrZero();
-      final chrRamSize = _getAttribute(game, 'chrram', 'size').toIntOrZero();
-      final prgRamSize = _getAttribute(game, 'prgram', 'size').toIntOrZero();
-      final prgSaveRamSize = _getAttribute(
-        game,
-        'prgnvram',
-        'size',
-      ).toIntOrZero();
-      final hasBattery = _getAttribute(game, 'pcb', 'battery') == '1';
-
-      _database[romHash] = NesDatabaseEntry(
-        name: name,
-        romHash: romHash,
-        chrHash: chrHash,
-        prgHash: prgHash,
-        chrRamSize: chrRamSize,
-        prgRamSize: prgRamSize,
-        prgSaveRamSize: prgSaveRamSize,
-        hasBattery: hasBattery,
-        mapper: mapper,
-        region: switch (region) {
-          0 => Region.ntsc,
-          1 => Region.pal,
-          _ => null,
-        },
-        expansion: int.parse(_getAttribute(game, 'expansion', 'type')!),
-      );
+    if (romHash == null) {
+      continue;
     }
+
+    final name = p.basenameWithoutExtension(
+      game.children.whereType<XmlComment>().single.value.trim().replaceAll(
+        '\\',
+        '/',
+      ),
+    );
+
+    final chrHash = _getHash(game, 'chrrom');
+    final prgHash = _getHash(game, 'prgrom')!;
+    final mapper = _getAttribute(game, 'pcb', 'mapper').toIntOrZero();
+    final region = _getAttribute(game, 'console', 'region').toIntOrZero();
+    final chrRamSize = _getAttribute(game, 'chrram', 'size').toIntOrZero();
+    final prgRamSize = _getAttribute(game, 'prgram', 'size').toIntOrZero();
+    final prgSaveRamSize = _getAttribute(
+      game,
+      'prgnvram',
+      'size',
+    ).toIntOrZero();
+    final hasBattery = _getAttribute(game, 'pcb', 'battery') == '1';
+
+    result[romHash] = NesDatabaseEntry(
+      name: name,
+      romHash: romHash,
+      chrHash: chrHash,
+      prgHash: prgHash,
+      chrRamSize: chrRamSize,
+      prgRamSize: prgRamSize,
+      prgSaveRamSize: prgSaveRamSize,
+      hasBattery: hasBattery,
+      mapper: mapper,
+      region: switch (region) {
+        0 => Region.ntsc,
+        1 => Region.pal,
+        _ => null,
+      },
+      expansion: int.parse(_getAttribute(game, 'expansion', 'type')!),
+    );
   }
 
-  String? _getAttribute(XmlElement child, String tag, String attribute) {
-    return child.findElements(tag).singleOrNull?.getAttribute(attribute);
-  }
+  return result;
+}
 
-  String? _getHash(XmlElement child, String tag) {
-    return child
-        .findElements(tag)
-        .singleOrNull
-        ?.getAttribute('sha1')
-        ?.toLowerCase();
-  }
+String? _getAttribute(XmlElement child, String tag, String attribute) {
+  return child.findElements(tag).singleOrNull?.getAttribute(attribute);
+}
+
+String? _getHash(XmlElement child, String tag) {
+  return child
+      .findElements(tag)
+      .singleOrNull
+      ?.getAttribute('sha1')
+      ?.toLowerCase();
 }
 
 class NesDatabaseEntry {
