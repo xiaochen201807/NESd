@@ -165,5 +165,8 @@ Future<String> _gitDiffHash() async {
 
 class _NullNesDatabase implements NesDatabase {
   @override
+  Future<void> get loadFuture => Future.value();
+
+  @override
   NesDatabaseEntry? find(RomInfo info) => null;
 }

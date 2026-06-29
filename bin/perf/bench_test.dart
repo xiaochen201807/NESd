@@ -186,5 +186,8 @@ String get _workspaceRoot {
 
 class _NullDb implements NesDatabase {
   @override
+  Future<void> get loadFuture => Future.value();
+
+  @override
   NesDatabaseEntry? find(RomInfo info) => null;
 }

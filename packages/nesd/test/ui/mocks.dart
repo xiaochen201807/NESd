@@ -73,5 +73,8 @@ class MockFileSystem extends Mock implements Filesystem {
 
 class MockNesDatabase extends Mock implements NesDatabase {
   @override
+  Future<void> get loadFuture => Future.value();
+
+  @override
   NesDatabaseEntry? find(RomInfo info) => null;
 }
