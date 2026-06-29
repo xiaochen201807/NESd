@@ -197,6 +197,7 @@ class AboutButton extends StatelessWidget {
     return NesdButton(
       onPressed: () => showDialog(
         context: context,
+        useRootNavigator: false,
         builder: (context) => const AboutDialog(),
       ),
       width: null,
