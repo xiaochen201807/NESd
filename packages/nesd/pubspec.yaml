@@ -92,6 +92,7 @@ flutter:
   assets:
     - assets/
     - assets/fonts/
+    - assets/nes20db.xml.gz
 
   fonts:
     - family: Inter
